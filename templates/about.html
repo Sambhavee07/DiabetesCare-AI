@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+
+{% block title %}DiabetesCare AI - About Project, Clinical Dataset &amp; ML Architecture{% endblock %}
+
+{% block content %}
+<section class="page-header about-header">
+    <div class="container text-center">
+        <span class="section-tag"><i class="fa-solid fa-graduation-cap"></i> Technical Documentation</span>
+        <h1 class="page-title">About the DiabetesCare AI Project</h1>
+        <p class="page-subtitle">
+            An end-to-end data science and preventive medicine engineering project bridging the CDC BRFSS epidemiological dataset with modern gradient-boosted decision ensembles.
+        </p>
+    </div>
+</section>
+
+<section class="section about-section">
+    <div class="container">
+        
+        <div class="about-grid">
+            <!-- Sidebar Navigation -->
+            <aside class="about-sidebar">
+                <nav class="about-nav">
+                    <a href="#overview" class="about-nav-link active"><i class="fa-solid fa-circle-dot"></i> Project Objective</a>
+                    <a href="#dataset" class="about-nav-link"><i class="fa-solid fa-database"></i> The CDC BRFSS Dataset</a>
+                    <a href="#eda" class="about-nav-link"><i class="fa-solid fa-chart-pie"></i> EDA &amp; Insights</a>
+                    <a href="#preprocessing" class="about-nav-link"><i class="fa-solid fa-filter"></i> Preprocessing &amp; Leakage</a>
+                    <a href="#algorithms" class="about-nav-link"><i class="fa-solid fa-microchip"></i> Algorithms Compared</a>
+                    <a href="#champion" class="about-nav-link"><i class="fa-solid fa-trophy"></i> Selected Champion Model</a>
+                    <a href="#thresholds" class="about-nav-link"><i class="fa-solid fa-sliders"></i> Threshold Calibration</a>
+                    <a href="#limitations" class="about-nav-link"><i class="fa-solid fa-triangle-exclamation"></i> Limitations &amp; Ethics</a>
+                </nav>
+            </aside>
+
+            <!-- Main Documentation Body -->
+            <div class="about-body">
+                
+                <!-- 1. Objective -->
+                <section id="overview" class="doc-card">
+                    <div class="doc-header">
+                        <span class="step-badge">01</span>
+                        <h2>Project Objective</h2>
+                    </div>
+                    <p>
+                        Type 2 diabetes mellitus is a global chronic health crisis affecting over 500 million people worldwide. Crucially, up to 90% of individuals with pre-diabetes remain undiagnosed because symptoms develop insidiously over many years.
+                    </p>
+                    <p>
+                        The objective of <strong>DiabetesCare AI</strong> is to construct an accessible, non-invasive early-warning screening tool using machine learning. By evaluating 21 readily accessible behavioral, biometric, and demographic indicators, the system identifies individuals at high risk and encourages timely clinical diagnostic laboratory tests (such as HbA1c or Fasting Blood Glucose).
+                    </p>
+                </section>
+
+                <!-- 2. Dataset -->
+                <section id="dataset" class="doc-card">
+                    <div class="doc-header">
+                        <span class="step-badge">02</span>
+                        <h2>The CDC BRFSS Dataset</h2>
+                    </div>
+                    <p>
+                        The dataset utilized is the <strong>Behavioral Risk Factor Surveillance System (BRFSS 2015)</strong>, curated annually by the United States Centers for Disease Control and Prevention (CDC). BRFSS is the world's largest continuously conducted telephone health survey, gathering health behaviors, chronic conditions, and healthcare access indicators from residents across all 50 states.
+                    </p>
+                    <div class="dataset-stats-grid">
+                        <div class="dstat-item">
+                            <span class="dstat-title">Raw Survey Records</span>
+                            <span class="dstat-val">253,680</span>
+                        </div>
+                        <div class="dstat-item">
+                            <span class="dstat-title">Features Analyzed</span>
+                            <span class="dstat-val">21 Predictors</span>
+                        </div>
+                        <div class="dstat-item">
+                            <span class="dstat-title">Target Variable</span>
+                            <span class="dstat-val">Diabetes_binary</span>
+                        </div>
+                        <div class="dstat-item">
+                            <span class="dstat-title">Missing Values</span>
+                            <span class="dstat-val">0 (Complete)</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. EDA -->
+                <section id="eda" class="doc-card">
+                    <div class="doc-header">
+                        <span class="step-badge">03</span>
+                        <h2>Exploratory Data Analysis (EDA) Highlights</h2>
+                    </div>
+                    <p>
+                        Our exploratory analysis revealed pivotal clinical patterns across the surveyed population:
+                    </p>
+                    <ul class="styled-list">
+                        <li><strong>Class Imbalance:</strong> 86.07% non-diabetic (Class 0) vs. 13.93% diabetic/pre-diabetic (Class 1), representing a 6.18:1 ratio in the raw data.</li>
+                        <li><strong>The Power of Self-Rated Health:</strong> General health rating (<code>GenHlth</code>) emerged as the single highest correlated feature ($r = +0.294$). The diabetes prevalence in respondents rating their health "Poor" is 37.89%, compared to just 2.52% in those rating "Excellent".</li>
+                        <li><strong>Age-Related Risk Acceleration:</strong> Diabetes risk increases monotonically from 1.37% (ages 18–24) to 21.85% (ages 70–74), confirming age as a fundamental physiological vulnerability.</li>
+                        <li><strong>Cardiometabolic Comorbidities:</strong> Individuals with high blood pressure exhibited a 24.45% diabetes rate (vs 6.04% for normotensive respondents), illustrating the tight link between arterial health and glycemic metabolism.</li>
+                    </ul>
+                </section>
+
+                <!-- 4. Preprocessing -->
+                <section id="preprocessing" class="doc-card">
+                    <div class="doc-header">
+                        <span class="step-badge">04</span>
+                        <h2>Data Preprocessing &amp; Data Leakage Prevention</h2>
+                    </div>
+                    <p>
+                        To ensure strict scientific validity and prevent overly optimistic evaluation scores:
+                    </p>
+                    <div class="process-steps">
+                        <div class="p-step">
+                            <h4>1. Deduplication Analysis</h4>
+                            <p>
+                                Identified 24,206 duplicate rows. Analysis showed that <strong>98.65% of duplicates were healthy (Class 0)</strong> respondents with identical discrete survey choices. Removing them prevented test-set memorization (data leakage) and improved positive class density from 13.93% to 15.29% without losing diverse health patterns (final clean rows: 229,474).
+                            </p>
+                        </div>
+                        <div class="p-step">
+                            <h4>2. Stratified 80:20 Split</h4>
+                            <p>
+                                Used <code>stratify=y</code> with <code>random_state=42</code> to strictly guarantee that both the training set (183,579 rows) and test set (45,895 rows) maintain identical 15.29% positive proportions.
+                            </p>
+                        </div>
+                        <div class="p-step">
+                            <h4>3. Standard Scaling (Without Leakage)</h4>
+                            <p>
+                                A <code>StandardScaler</code> was fitted strictly on <code>X_train</code> and saved to <code>scaler.joblib</code>. Linear models consumed scaled data; tree-based models consumed clean unscaled data.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. Algorithms Compared -->
+                <section id="algorithms" class="doc-card">
+                    <div class="doc-header">
+                        <span class="step-badge">05</span>
+                        <h2>Machine Learning Algorithms Compared</h2>
+                    </div>
+                    <p>
+                        Four diverse model families were trained using class-balanced weighting (<code>class_weight='balanced'</code>) and evaluated on 45,895 unseen test patients:
+                    </p>
+                    <div class="algo-cards-grid">
+                        <div class="algo-box">
+                            <h4>Logistic Regression</h4>
+                            <p>L2-regularized linear baseline. Fast (1.19s), achieves 76.01% recall and 0.8106 ROC-AUC, but limited by linear decision boundaries.</p>
+                        </div>
+                        <div class="algo-box">
+                            <h4>Decision Tree Classifier</h4>
+                            <p>Single pruned CART tree (max depth 10). Interpretable flowchart rules; achieved 77.19% recall and 0.8015 ROC-AUC.</p>
+                        </div>
+                        <div class="algo-box">
+                            <h4>Random Forest Classifier</h4>
+                            <p>Ensemble of 100 balanced decision trees with bagging. Solid 77.82% recall, 0.8173 ROC-AUC, and 0.4426 PR-AUC.</p>
+                        </div>
+                        <div class="algo-box winner">
+                            <h4>HistGradientBoosting Classifier 🏆</h4>
+                            <p>Scikit-learn's modern histogram-based gradient boosting algorithm. Won across all critical discrimination and screening metrics.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 6. Champion Model -->
+                <section id="champion" class="doc-card">
+                    <div class="doc-header">
+                        <span class="step-badge">06</span>
+                        <h2>Why HistGradientBoosting Was Selected</h2>
+                    </div>
+                    <p>
+                        In healthcare triage, <strong>Recall (Sensitivity)</strong> and <strong>PR-AUC</strong> are paramount. A model that misses diabetic individuals poses severe risks to patients who miss early intervention opportunities.
+                    </p>
+                    <table class="table-modern">
+                        <thead>
+                            <tr>
+                                <th>Reason</th>
+                                <th>Clinical / Technical Advantage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Highest Recall</strong></td>
+                                <td>Identified 79.13% of all diabetic cases at default threshold (up to 85.11% with tuning), outperforming all other models.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Highest ROC-AUC (0.8186)</strong></td>
+                                <td>Best ability to rank a randomly chosen diabetic individual higher than a non-diabetic individual.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Highest PR-AUC (0.4454)</strong></td>
+                                <td>Significantly outperformed Logistic Regression (0.4121) and Decision Tree (0.4163) on the imbalanced positive class.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Ultra-Compact Serialized Size</strong></td>
+                                <td>At just 275 KB, <code>best_model.joblib</code> loads in milliseconds and executes inference in under 5 milliseconds.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- 7. Threshold Calibration -->
+                <section id="thresholds" class="doc-card">
+                    <div class="doc-header">
+                        <span class="step-badge">07</span>
+                        <h2>Inner Validation Threshold Calibration</h2>
+                    </div>
+                    <p>
+                        Standard machine learning models classify any probability $\ge 0.50$ as positive. However, in medical screening where false negatives are critical, default 0.50 cutoffs miss too many early cases.
+                    </p>
+                    <p>
+                        We carved out an inner validation set (36,716 samples) exclusively from training data and evaluated 81 potential cutoffs to maximize the $F_2$-score (giving twice the weight to Recall over Precision).
+                    </p>
+                    <div class="alert alert-success">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span><strong>Outcome:</strong> Calibrating the threshold to <strong>0.43</strong> increased screening recall on the unseen test set from <strong>79.13% to 85.11%</strong>, cutting missed diabetic diagnoses by <strong>28.7%</strong> (from 1,465 down to 1,045).</span>
+                    </div>
+                </section>
+
+                <!-- 8. Limitations & Ethics -->
+                <section id="limitations" class="doc-card">
+                    <div class="doc-header">
+                        <span class="step-badge">08</span>
+                        <h2>Model Limitations &amp; Ethical Considerations</h2>
+                    </div>
+                    <p>
+                        Responsible AI deployment requires transparent disclosure of model boundaries:
+                    </p>
+                    <ul class="styled-list">
+                        <li><strong>Survey-Based Self-Reporting:</strong> BRFSS relies on telephone interview responses. Self-reported weight, height, and general health are susceptible to recall bias and social desirability bias.</li>
+                        <li><strong>Cross-Sectional Nature:</strong> The dataset is observational and cross-sectional. Correlations identified by the model do not establish direct medical causality.</li>
+                        <li><strong>Screening vs. Diagnosis:</strong> A statistical risk prediction of 75% does not mean an individual is definitively diabetic—it means their profile strongly matches demographic cohorts with high diabetes incidence.</li>
+                    </ul>
+
+                    <div class="alert alert-danger mt-3">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <span><strong>Clinical Disclaimer:</strong> DiabetesCare AI is an educational technology demonstration. It does not provide medical diagnoses, treatment prescriptions, or formal medical clearance. Users must consult licensed physicians for clinical blood tests (such as HbA1c or oral glucose tolerance tests).</span>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,51 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env/
+
+# Environment variables / secrets
+.env
+*.env
+
+# Large dataset files (available on Kaggle)
+diabetes_binary_health_indicators_BRFSS2015.csv
+
+# Generated processed data CSVs (reproducible from dataset + preprocessing script)
+processed_data/X_train.csv
+processed_data/X_train_scaled.csv
+processed_data/X_test.csv
+processed_data/X_test_scaled.csv
+processed_data/y_train.csv
+processed_data/y_test.csv
+
+# NOTE: processed_data/scaler.joblib and preprocessing_metadata.json are NOT excluded
+# NOTE: models/best_model.joblib is NOT excluded — required for inference
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs and temp files
+*.log
+*.tmp
+*.bak
+
+# Distribution / build
+dist/
+build/
+*.egg-info/
+
+# Jupyter Notebooks checkpoints
+.ipynb_checkpoints/
+
+# IDEs (keep .vscode/settings.json for Jinja2 config)
+.idea/

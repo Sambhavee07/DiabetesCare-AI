@@ -1,0 +1,69 @@
+{
+    "original_shape": [
+        253680,
+        22
+    ],
+    "clean_shape": [
+        229474,
+        22
+    ],
+    "duplicate_rows_removed": 24206,
+    "train_rows": 183579,
+    "test_rows": 45895,
+    "feature_names": [
+        "HighBP",
+        "HighChol",
+        "CholCheck",
+        "BMI",
+        "Smoker",
+        "Stroke",
+        "HeartDiseaseorAttack",
+        "PhysActivity",
+        "Fruits",
+        "Veggies",
+        "HvyAlcoholConsump",
+        "AnyHealthcare",
+        "NoDocbcCost",
+        "GenHlth",
+        "MentHlth",
+        "PhysHlth",
+        "DiffWalk",
+        "Sex",
+        "Age",
+        "Education",
+        "Income"
+    ],
+    "target_name": "Diabetes_binary",
+    "train_class_counts": {
+        "0": 155501,
+        "1": 28078
+    },
+    "test_class_counts": {
+        "0": 38876,
+        "1": 7019
+    },
+    "scaler_type": "StandardScaler",
+    "features_scaled": [
+        "HighBP",
+        "HighChol",
+        "CholCheck",
+        "BMI",
+        "Smoker",
+        "Stroke",
+        "HeartDiseaseorAttack",
+        "PhysActivity",
+        "Fruits",
+        "Veggies",
+        "HvyAlcoholConsump",
+        "AnyHealthcare",
+        "NoDocbcCost",
+        "GenHlth",
+        "MentHlth",
+        "PhysHlth",
+        "DiffWalk",
+        "Sex",
+        "Age",
+        "Education",
+        "Income"
+    ]
+}

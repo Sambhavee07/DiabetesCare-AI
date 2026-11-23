@@ -1,0 +1,110 @@
+{
+    "Logistic Regression": {
+        "No Diabetes (0)": {
+            "precision": 0.9421941507620486,
+            "recall": 0.7060397160201667,
+            "f1-score": 0.8071991530408187,
+            "support": 38876.0
+        },
+        "Diabetes (1)": {
+            "precision": 0.3182604545725705,
+            "recall": 0.7600797834449352,
+            "f1-score": 0.4486586493987049,
+            "support": 7019.0
+        },
+        "accuracy": 0.7143043904564768,
+        "macro avg": {
+            "precision": 0.6302273026673095,
+            "recall": 0.733059749732551,
+            "f1-score": 0.6279289012197617,
+            "support": 45895.0
+        },
+        "weighted avg": {
+            "precision": 0.8467721960054531,
+            "recall": 0.7143043904564768,
+            "f1-score": 0.752365384764013,
+            "support": 45895.0
+        }
+    },
+    "Decision Tree": {
+        "No Diabetes (0)": {
+            "precision": 0.9432027813253867,
+            "recall": 0.6838923757588229,
+            "f1-score": 0.79288440892282,
+            "support": 38876.0
+        },
+        "Diabetes (1)": {
+            "precision": 0.30598068560456315,
+            "recall": 0.7719048297478274,
+            "f1-score": 0.43824314486775057,
+            "support": 7019.0
+        },
+        "accuracy": 0.697352652794422,
+        "macro avg": {
+            "precision": 0.6245917334649749,
+            "recall": 0.7278986027533252,
+            "f1-score": 0.6155637768952853,
+            "support": 45895.0
+        },
+        "weighted avg": {
+            "precision": 0.8457485512379161,
+            "recall": 0.697352652794422,
+            "f1-score": 0.7386469749452074,
+            "support": 45895.0
+        }
+    },
+    "Random Forest": {
+        "No Diabetes (0)": {
+            "precision": 0.9461841559518872,
+            "recall": 0.7041619508179854,
+            "f1-score": 0.8074268522888155,
+            "support": 38876.0
+        },
+        "Diabetes (1)": {
+            "precision": 0.3219949301420739,
+            "recall": 0.778173528992734,
+            "f1-score": 0.45550829789008423,
+            "support": 7019.0
+        },
+        "accuracy": 0.7154809892145114,
+        "macro avg": {
+            "precision": 0.6340895430469806,
+            "recall": 0.7411677399053597,
+            "f1-score": 0.6314675750894498,
+            "support": 45895.0
+        },
+        "weighted avg": {
+            "precision": 0.8507231215045818,
+            "recall": 0.7154809892145114,
+            "f1-score": 0.7536058187704652,
+            "support": 45895.0
+        }
+    },
+    "Gradient Boosting": {
+        "No Diabetes (0)": {
+            "precision": 0.9483208691971214,
+            "recall": 0.6915063278115032,
+            "f1-score": 0.7998036415565869,
+            "support": 38876.0
+        },
+        "Diabetes (1)": {
+            "precision": 0.31652134267966037,
+            "recall": 0.7912808092320843,
+            "f1-score": 0.4521696653911911,
+            "support": 7019.0
+        },
+        "accuracy": 0.7067654428586992,
+        "macro avg": {
+            "precision": 0.6324211059383908,
+            "recall": 0.7413935685217938,
+            "f1-score": 0.6259866534738889,
+            "support": 45895.0
+        },
+        "weighted avg": {
+            "precision": 0.851695945422722,
+            "recall": 0.7067654428586992,
+            "f1-score": 0.7466378745077817,
+            "support": 45895.0
+        }
+    }
+}

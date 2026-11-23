@@ -1,0 +1,415 @@
+{% extends "base.html" %}
+
+{% block title %}DiabetesCare AI - Comprehensive 21-Feature Health Risk Assessment{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container text-center">
+        <span class="section-tag"><i class="fa-solid fa-clipboard-check"></i> Clinical Assessment</span>
+        <h1 class="page-title">Personalized Diabetes Risk Assessment</h1>
+        <p class="page-subtitle">
+            Answer the 21 health, metabolic, and lifestyle questions below. Our trained Machine Learning model will evaluate your indicators in real-time.
+        </p>
+    </div>
+</section>
+
+<section class="section form-section">
+    <div class="container">
+        <!-- Quick Preset Demo Buttons for Evaluator Testing -->
+        <div class="demo-preset-card">
+            <div class="preset-title">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> <strong>Quick Test Presets (One-Click Auto-Fill):</strong>
+            </div>
+            <div class="preset-buttons">
+                <button type="button" class="btn btn-sm btn-outline" id="btnFillHealthy">
+                    <i class="fa-solid fa-heart-circle-check text-success"></i> Auto-Fill Healthy Profile (Low Risk)
+                </button>
+                <button type="button" class="btn btn-sm btn-outline" id="btnFillElevated">
+                    <i class="fa-solid fa-triangle-exclamation text-warning"></i> Auto-Fill Moderate Profile (Borderline)
+                </button>
+                <button type="button" class="btn btn-sm btn-outline" id="btnFillHighRisk">
+                    <i class="fa-solid fa-circle-exclamation text-danger"></i> Auto-Fill High Risk Profile (Alert)
+                </button>
+                <button type="button" class="btn btn-sm btn-light" id="btnResetForm">
+                    <i class="fa-solid fa-rotate-left"></i> Reset Form
+                </button>
+            </div>
+        </div>
+
+        <form action="{{ url_for('predict') }}" method="POST" id="assessmentForm" class="assessment-form">
+            
+            <!-- SECTION 1: Personal & Demographic Information -->
+            <div class="form-card">
+                <div class="form-card-header">
+                    <div class="header-icon blue"><i class="fa-solid fa-user"></i></div>
+                    <div>
+                        <h3>Section 1: Demographic Information</h3>
+                        <p>Basic demographic context utilized by population epidemiological models.</p>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <!-- Age -->
+                    <div class="form-group">
+                        <label for="Age" class="form-label">
+                            Age Group <span class="required">*</span>
+                            <span class="tooltip-icon" title="CDC BRFSS encodes age into 13 discrete five-year bands."><i class="fa-solid fa-circle-info"></i></span>
+                        </label>
+                        <select name="Age" id="Age" class="form-control" required>
+                            <option value="" disabled selected>Select your age bracket...</option>
+                            <option value="1">18 to 24 years old</option>
+                            <option value="2">25 to 29 years old</option>
+                            <option value="3">30 to 34 years old</option>
+                            <option value="4">35 to 39 years old</option>
+                            <option value="5">40 to 44 years old</option>
+                            <option value="6">45 to 49 years old</option>
+                            <option value="7">50 to 54 years old</option>
+                            <option value="8">55 to 59 years old</option>
+                            <option value="9">60 to 64 years old</option>
+                            <option value="10">65 to 69 years old</option>
+                            <option value="11">70 to 74 years old</option>
+                            <option value="12">75 to 79 years old</option>
+                            <option value="13">80 years or older</option>
+                        </select>
+                    </div>
+
+                    <!-- Sex -->
+                    <div class="form-group">
+                        <label for="Sex" class="form-label">
+                            Biological Sex <span class="required">*</span>
+                        </label>
+                        <select name="Sex" id="Sex" class="form-control" required>
+                            <option value="" disabled selected>Select biological sex...</option>
+                            <option value="0">Female</option>
+                            <option value="1">Male</option>
+                        </select>
+                    </div>
+
+                    <!-- Education -->
+                    <div class="form-group">
+                        <label for="Education" class="form-label">
+                            Highest Level of Education <span class="required">*</span>
+                        </label>
+                        <select name="Education" id="Education" class="form-control" required>
+                            <option value="" disabled selected>Select education level...</option>
+                            <option value="1">Never attended school / Kindergarten only</option>
+                            <option value="2">Elementary (Grades 1 to 8)</option>
+                            <option value="3">Some high school (Grades 9 to 11)</option>
+                            <option value="4">High school graduate or GED</option>
+                            <option value="5">Some college or technical school (1 to 3 years)</option>
+                            <option value="6">College graduate (4+ years / Bachelor's or higher)</option>
+                        </select>
+                    </div>
+
+                    <!-- Income -->
+                    <div class="form-group">
+                        <label for="Income" class="form-label">
+                            Annual Household Income <span class="required">*</span>
+                            <span class="tooltip-icon" title="Income correlates with healthcare access and nutritional equity."><i class="fa-solid fa-circle-info"></i></span>
+                        </label>
+                        <select name="Income" id="Income" class="form-control" required>
+                            <option value="" disabled selected>Select annual household income...</option>
+                            <option value="1">Less than $10,000</option>
+                            <option value="2">$10,000 to &lt; $15,000</option>
+                            <option value="3">$15,000 to &lt; $20,000</option>
+                            <option value="4">$20,000 to &lt; $25,000</option>
+                            <option value="5">$25,000 to &lt; $35,000</option>
+                            <option value="6">$35,000 to &lt; $50,000</option>
+                            <option value="7">$50,000 to &lt; $75,000</option>
+                            <option value="8">$75,000 or more</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: Body Mass Index (BMI) & Clinical Health Indicators -->
+            <div class="form-card">
+                <div class="form-card-header">
+                    <div class="header-icon green"><i class="fa-solid fa-heart-pulse"></i></div>
+                    <div>
+                        <h3>Section 2: Clinical &amp; Metabolic Indicators</h3>
+                        <p>Key biometric and diagnosed medical history indicators.</p>
+                    </div>
+                </div>
+
+                <!-- Interactive BMI Calculator Box -->
+                <div class="bmi-calculator-box">
+                    <div class="bmi-calc-header">
+                        <span><i class="fa-solid fa-calculator"></i> Don't know your BMI? Calculate it instantly:</span>
+                        <button type="button" class="btn btn-xs btn-link" id="toggleBmiCalc">Hide Calculator</button>
+                    </div>
+                    <div class="bmi-calc-body" id="bmiCalcBody">
+                        <div class="bmi-inputs">
+                            <div class="bmi-subgroup">
+                                <label>Weight (kg):</label>
+                                <input type="number" id="calcWeight" placeholder="e.g. 70" step="0.5" class="form-control-sm">
+                            </div>
+                            <div class="bmi-subgroup">
+                                <label>Height (cm):</label>
+                                <input type="number" id="calcHeight" placeholder="e.g. 175" step="1" class="form-control-sm">
+                            </div>
+                            <button type="button" class="btn btn-sm btn-primary" id="btnCalculateBmi">
+                                Calculate &amp; Insert
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <!-- BMI Input -->
+                    <div class="form-group">
+                        <label for="BMI" class="form-label">
+                            Body Mass Index (BMI) <span class="required">*</span>
+                            <span class="tooltip-icon" title="Healthy: 18.5–24.9 | Overweight: 25.0–29.9 | Obese: 30.0+"><i class="fa-solid fa-circle-info"></i></span>
+                        </label>
+                        <div class="input-with-badge">
+                            <input type="number" step="0.1" min="10" max="98" name="BMI" id="BMI" class="form-control" placeholder="e.g. 27.5" required>
+                            <span class="input-badge" id="bmiBadge">--</span>
+                        </div>
+                        <small class="form-text">Clinical range: 10.0 to 98.0 kg/m²</small>
+                    </div>
+
+                    <!-- GenHlth -->
+                    <div class="form-group">
+                        <label for="GenHlth" class="form-label">
+                            General Health Self-Rating <span class="required">*</span>
+                            <span class="tooltip-icon" title="Top predictor in the trained Gradient Boosting model."><i class="fa-solid fa-circle-info"></i></span>
+                        </label>
+                        <select name="GenHlth" id="GenHlth" class="form-control" required>
+                            <option value="" disabled selected>In general, how would you rate your health?</option>
+                            <option value="1">1 - Excellent</option>
+                            <option value="2">2 - Very Good</option>
+                            <option value="3">3 - Good</option>
+                            <option value="4">4 - Fair</option>
+                            <option value="5">5 - Poor</option>
+                        </select>
+                    </div>
+
+                    <!-- HighBP -->
+                    <div class="form-group">
+                        <label for="HighBP" class="form-label">
+                            High Blood Pressure Diagnosed? <span class="required">*</span>
+                        </label>
+                        <select name="HighBP" id="HighBP" class="form-control" required>
+                            <option value="" disabled selected>Have you ever been told you have high blood pressure?</option>
+                            <option value="0">No &mdash; Normal blood pressure</option>
+                            <option value="1">Yes &mdash; Diagnosed high blood pressure / taking medication</option>
+                        </select>
+                    </div>
+
+                    <!-- HighChol -->
+                    <div class="form-group">
+                        <label for="HighChol" class="form-label">
+                            High Blood Cholesterol? <span class="required">*</span>
+                        </label>
+                        <select name="HighChol" id="HighChol" class="form-control" required>
+                            <option value="" disabled selected>Have you ever been told your blood cholesterol is high?</option>
+                            <option value="0">No &mdash; Normal cholesterol</option>
+                            <option value="1">Yes &mdash; Diagnosed high cholesterol</option>
+                        </select>
+                    </div>
+
+                    <!-- CholCheck -->
+                    <div class="form-group">
+                        <label for="CholCheck" class="form-label">
+                            Cholesterol Check in Past 5 Years? <span class="required">*</span>
+                        </label>
+                        <select name="CholCheck" id="CholCheck" class="form-control" required>
+                            <option value="" disabled selected>Have you had your cholesterol checked within the past 5 years?</option>
+                            <option value="1">Yes &mdash; Checked within past 5 years</option>
+                            <option value="0">No &mdash; Not checked in past 5 years</option>
+                        </select>
+                    </div>
+
+                    <!-- Stroke -->
+                    <div class="form-group">
+                        <label for="Stroke" class="form-label">
+                            History of Stroke? <span class="required">*</span>
+                        </label>
+                        <select name="Stroke" id="Stroke" class="form-control" required>
+                            <option value="" disabled selected>Ever told you had a stroke?</option>
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                    </div>
+
+                    <!-- HeartDiseaseorAttack -->
+                    <div class="form-group">
+                        <label for="HeartDiseaseorAttack" class="form-label">
+                            Coronary Heart Disease or Heart Attack? <span class="required">*</span>
+                        </label>
+                        <select name="HeartDiseaseorAttack" id="HeartDiseaseorAttack" class="form-control" required>
+                            <option value="" disabled selected>History of angina or myocardial infarction?</option>
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                    </div>
+
+                    <!-- DiffWalk -->
+                    <div class="form-group">
+                        <label for="DiffWalk" class="form-label">
+                            Difficulty Walking or Climbing Stairs? <span class="required">*</span>
+                        </label>
+                        <select name="DiffWalk" id="DiffWalk" class="form-control" required>
+                            <option value="" disabled selected>Do you have serious difficulty walking or climbing stairs?</option>
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: Lifestyle & Nutritional Habits -->
+            <div class="form-card">
+                <div class="form-card-header">
+                    <div class="header-icon amber"><i class="fa-solid fa-person-running"></i></div>
+                    <div>
+                        <h3>Section 3: Lifestyle &amp; Dietary Behaviors</h3>
+                        <p>Daily habits that influence insulin resistance and metabolic homeostasis.</p>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <!-- Smoker -->
+                    <div class="form-group">
+                        <label for="Smoker" class="form-label">
+                            Tobacco Smoking History <span class="required">*</span>
+                            <span class="tooltip-icon" title="CDC definition: Have you smoked at least 100 cigarettes in your entire life?"><i class="fa-solid fa-circle-info"></i></span>
+                        </label>
+                        <select name="Smoker" id="Smoker" class="form-control" required>
+                            <option value="" disabled selected>Have you smoked &ge; 100 cigarettes in your life?</option>
+                            <option value="0">No &mdash; Non-smoker</option>
+                            <option value="1">Yes &mdash; Former or current smoker</option>
+                        </select>
+                    </div>
+
+                    <!-- PhysActivity -->
+                    <div class="form-group">
+                        <label for="PhysActivity" class="form-label">
+                            Physical Activity in Past 30 Days <span class="required">*</span>
+                            <span class="tooltip-icon" title="Any physical exercise outside of your regular job (e.g. walking, running, gardening, cycling)."><i class="fa-solid fa-circle-info"></i></span>
+                        </label>
+                        <select name="PhysActivity" id="PhysActivity" class="form-control" required>
+                            <option value="" disabled selected>Any physical exercise in past 30 days?</option>
+                            <option value="1">Yes &mdash; Engaged in physical activity</option>
+                            <option value="0">No &mdash; Sedentary / no exercise outside regular work</option>
+                        </select>
+                    </div>
+
+                    <!-- Fruits -->
+                    <div class="form-group">
+                        <label for="Fruits" class="form-label">
+                            Daily Fruit Consumption <span class="required">*</span>
+                        </label>
+                        <select name="Fruits" id="Fruits" class="form-control" required>
+                            <option value="" disabled selected>Do you consume fruit 1 or more times per day?</option>
+                            <option value="1">Yes &mdash; At least 1 serving daily</option>
+                            <option value="0">No &mdash; Less than 1 serving daily</option>
+                        </select>
+                    </div>
+
+                    <!-- Veggies -->
+                    <div class="form-group">
+                        <label for="Veggies" class="form-label">
+                            Daily Vegetable Consumption <span class="required">*</span>
+                        </label>
+                        <select name="Veggies" id="Veggies" class="form-control" required>
+                            <option value="" disabled selected>Do you consume vegetables 1 or more times per day?</option>
+                            <option value="1">Yes &mdash; At least 1 serving daily</option>
+                            <option value="0">No &mdash; Less than 1 serving daily</option>
+                        </select>
+                    </div>
+
+                    <!-- HvyAlcoholConsump -->
+                    <div class="form-group">
+                        <label for="HvyAlcoholConsump" class="form-label">
+                            Heavy Alcohol Consumption? <span class="required">*</span>
+                            <span class="tooltip-icon" title="CDC definition: Adult men &ge; 14 drinks/week; adult women &ge; 7 drinks/week."><i class="fa-solid fa-circle-info"></i></span>
+                        </label>
+                        <select name="HvyAlcoholConsump" id="HvyAlcoholConsump" class="form-control" required>
+                            <option value="" disabled selected>Do you meet heavy drinking criteria?</option>
+                            <option value="0">No &mdash; Moderate or no alcohol</option>
+                            <option value="1">Yes &mdash; Heavy alcohol consumption</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 4: Healthcare Access & Well-Being Days -->
+            <div class="form-card">
+                <div class="form-card-header">
+                    <div class="header-icon purple"><i class="fa-solid fa-hospital-user"></i></div>
+                    <div>
+                        <h3>Section 4: Healthcare Access &amp; Well-Being</h3>
+                        <p>Insurance status, medical affordability, and monthly physical/mental health days.</p>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <!-- AnyHealthcare -->
+                    <div class="form-group">
+                        <label for="AnyHealthcare" class="form-label">
+                            Healthcare Coverage <span class="required">*</span>
+                        </label>
+                        <select name="AnyHealthcare" id="AnyHealthcare" class="form-control" required>
+                            <option value="" disabled selected>Do you have any healthcare insurance or coverage?</option>
+                            <option value="1">Yes &mdash; Insured</option>
+                            <option value="0">No &mdash; Uninsured</option>
+                        </select>
+                    </div>
+
+                    <!-- NoDocbcCost -->
+                    <div class="form-group">
+                        <label for="NoDocbcCost" class="form-label">
+                            Doctor Care Delayed Due to Cost? <span class="required">*</span>
+                        </label>
+                        <select name="NoDocbcCost" id="NoDocbcCost" class="form-control" required>
+                            <option value="" disabled selected>Time in past 12 months when you needed to see a doctor but could not due to cost?</option>
+                            <option value="0">No &mdash; Not delayed by cost</option>
+                            <option value="1">Yes &mdash; Delayed care due to financial cost</option>
+                        </select>
+                    </div>
+
+                    <!-- MentHlth -->
+                    <div class="form-group">
+                        <label for="MentHlth" class="form-label">
+                            Poor Mental Health Days (Past 30 Days) <span class="required">*</span>
+                            <span class="tooltip-icon" title="Number of days during past 30 days with stress, depression, or emotional issues."><i class="fa-solid fa-circle-info"></i></span>
+                        </label>
+                        <div class="slider-wrapper">
+                            <input type="range" min="0" max="30" value="0" name="MentHlth" id="MentHlth" class="form-range">
+                            <span class="range-value" id="mentHlthVal">0 days</span>
+                        </div>
+                    </div>
+
+                    <!-- PhysHlth -->
+                    <div class="form-group">
+                        <label for="PhysHlth" class="form-label">
+                            Poor Physical Health Days (Past 30 Days) <span class="required">*</span>
+                            <span class="tooltip-icon" title="Number of days during past 30 days where physical illness or injury hindered normal activity."><i class="fa-solid fa-circle-info"></i></span>
+                        </label>
+                        <div class="slider-wrapper">
+                            <input type="range" min="0" max="30" value="0" name="PhysHlth" id="PhysHlth" class="form-range">
+                            <span class="range-value" id="physHlthVal">0 days</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Submit Actions -->
+            <div class="form-submit-bar text-center">
+                <button type="submit" class="btn btn-primary btn-xl" id="btnSubmitAssessment">
+                    <i class="fa-solid fa-microchip"></i> Run Machine Learning Risk Assessment
+                </button>
+                <p class="submit-note">
+                    <i class="fa-solid fa-lock"></i> All 21 features are evaluated in memory by our HistGradientBoosting model. Zero private data is saved or tracked.
+                </p>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/predict.js') }}"></script>
+{% endblock %}

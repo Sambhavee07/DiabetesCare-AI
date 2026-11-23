@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}DiabetesCare AI - Intelligent Health Risk Prediction{% endblock %}</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <!-- Top Healthcare Announcement Bar -->
+    <div class="top-announcement">
+        <div class="container announcement-inner">
+            <span><i class="fa-solid fa-flask-vial"></i> Academic Research Demonstration &mdash; Powered by CDC BRFSS Machine Learning Pipeline</span>
+            <span class="announcement-badge">AI Screening Engine</span>
+        </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="{{ url_for('index') }}" class="brand-logo">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">DiabetesCare <span class="ai-pill">AI</span></span>
+                    <span class="brand-tagline">Clinical Risk Intelligence</span>
+                </div>
+            </a>
+
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <nav class="nav-menu" id="navMenu">
+                <a href="{{ url_for('index') }}" class="nav-link {% if request.endpoint == 'index' %}active{% endif %}">
+                    <i class="fa-solid fa-house"></i> Home
+                </a>
+                <a href="{{ url_for('predict') }}" class="nav-link {% if request.endpoint == 'predict' %}active{% endif %}">
+                    <i class="fa-solid fa-stethoscope"></i> Health Assessment
+                </a>
+                <a href="{{ url_for('dashboard') }}" class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}">
+                    <i class="fa-solid fa-chart-line"></i> Analytics Dashboard
+                </a>
+                <a href="{{ url_for('about') }}" class="nav-link {% if request.endpoint == 'about' %}active{% endif %}">
+                    <i class="fa-solid fa-circle-info"></i> About Project
+                </a>
+                <a href="{{ url_for('predict') }}" class="btn btn-primary nav-cta">
+                    <i class="fa-solid fa-shield-heart"></i> Check Risk
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Flash Messages -->
+    <div class="container flash-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span>{{ message }}</span>
+                        <button type="button" class="alert-close" onclick="this.parentElement.remove()">&times;</button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Medical Disclaimer Banner -->
+    <section class="disclaimer-banner">
+        <div class="container disclaimer-inner">
+            <div class="disclaimer-icon">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <div class="disclaimer-text">
+                <strong>Medical Notice &amp; Academic Scope:</strong> DiabetesCare AI is an educational predictive tool developed for machine learning research using the CDC's Behavioral Risk Factor Surveillance System (BRFSS 2015). Predictions represent statistical risk estimates, not formal clinical diagnoses. Always consult a qualified medical physician or endocrinologist for clinical blood tests (such as HbA1c or Fasting Plasma Glucose).
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-col brand-col">
+                <div class="brand-logo footer-logo">
+                    <div class="logo-icon small">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                    </div>
+                    <span class="brand-name">DiabetesCare <span class="ai-pill">AI</span></span>
+                </div>
+                <p class="footer-desc">
+                    Bridging machine learning and preventive healthcare to empower individuals with early metabolic risk awareness and actionable lifestyle insights.
+                </p>
+                <div class="footer-badges">
+                    <span class="tech-tag"><i class="fa-brands fa-python"></i> Python Flask</span>
+                    <span class="tech-tag"><i class="fa-solid fa-brain"></i> Scikit-Learn</span>
+                    <span class="tech-tag"><i class="fa-solid fa-chart-pie"></i> Chart.js</span>
+                </div>
+            </div>
+
+            <div class="footer-col links-col">
+                <h4 class="footer-heading">Platform Navigation</h4>
+                <ul class="footer-links">
+                    <li><a href="{{ url_for('index') }}"><i class="fa-solid fa-chevron-right"></i> Home Overview</a></li>
+                    <li><a href="{{ url_for('predict') }}"><i class="fa-solid fa-chevron-right"></i> 21-Feature Risk Assessment</a></li>
+                    <li><a href="{{ url_for('dashboard') }}"><i class="fa-solid fa-chevron-right"></i> Model Analytics &amp; EDA</a></li>
+                    <li><a href="{{ url_for('about') }}"><i class="fa-solid fa-chevron-right"></i> Methodology &amp; Metrics</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col info-col">
+                <h4 class="footer-heading">Model Information</h4>
+                <ul class="footer-info">
+                    <li><i class="fa-solid fa-database"></i> <strong>Dataset:</strong> CDC BRFSS 2015 (253,680 records)</li>
+                    <li><i class="fa-solid fa-microchip"></i> <strong>Engine:</strong> HistGradientBoosting Classifier</li>
+                    <li><i class="fa-solid fa-bullseye"></i> <strong>Screening Sensitivity:</strong> 85.11% (Threshold 0.43)</li>
+                    <li><i class="fa-solid fa-lock"></i> <strong>Data Privacy:</strong> 100% Client-Side / No PII Stored</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container bottom-inner">
+                <p>&copy; 2026 DiabetesCare AI &mdash; Advanced Machine Learning for Preventive Medicine.</p>
+                <p class="disclaimer-note">Non-Commercial Educational &amp; Engineering Project.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Main JavaScript -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

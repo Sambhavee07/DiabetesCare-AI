@@ -1,0 +1,310 @@
+{% extends "base.html" %}
+
+{% block title %}DiabetesCare AI - Understand Your Health. Take a Step Towards Prevention.{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container hero-container">
+        <div class="hero-text-col">
+            <div class="hero-badge">
+                <span class="pulse-dot"></span>
+                <span>CDC BRFSS Machine Learning Model &bull; 85.1% Detection Sensitivity</span>
+            </div>
+            <h1 class="hero-title">
+                Understand Your Health. <br>
+                <span class="gradient-text">Take a Step Towards Prevention.</span>
+            </h1>
+            <p class="hero-subtitle">
+                DiabetesCare AI evaluates your metabolic, demographic, and lifestyle indicators using an advanced 
+                <strong>Gradient Boosted Decision Engine</strong>. Identify early indicators of pre-diabetes and diabetes before symptoms emerge.
+            </p>
+            <div class="hero-actions">
+                <a href="{{ url_for('predict') }}" class="btn btn-primary btn-lg">
+                    <i class="fa-solid fa-stethoscope"></i> Start Health Assessment
+                </a>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-outline btn-lg">
+                    <i class="fa-solid fa-chart-simple"></i> View Model Analytics
+                </a>
+            </div>
+            
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">253,680</span>
+                    <span class="stat-label">Surveyed Patients</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number">85.1%</span>
+                    <span class="stat-label">Screening Recall</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number">0.819</span>
+                    <span class="stat-label">ROC-AUC Score</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number">21</span>
+                    <span class="stat-label">Health Indicators</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-visual-col">
+            <div class="hero-card-stack">
+                <div class="floating-badge top-right">
+                    <i class="fa-solid fa-shield-heart"></i>
+                    <div>
+                        <strong>Early Detection</strong>
+                        <span>Pre-symptomatic screening</span>
+                    </div>
+                </div>
+
+                <div class="preview-card">
+                    <div class="card-header-clean">
+                        <div class="avatar-circle">
+                            <i class="fa-solid fa-user-doctor"></i>
+                        </div>
+                        <div>
+                            <h4>Preventive Risk Summary</h4>
+                            <p>Gradient Boosting Engine v1.0</p>
+                        </div>
+                        <span class="status-pill status-ready">Active</span>
+                    </div>
+
+                    <div class="risk-meter-preview">
+                        <div class="meter-bar-outer">
+                            <div class="meter-bar-fill" style="width: 78%;"></div>
+                        </div>
+                        <div class="meter-labels">
+                            <span>0% (Low Risk)</span>
+                            <span class="meter-threshold">Alert: 43%</span>
+                            <span>100% (High Risk)</span>
+                        </div>
+                    </div>
+
+                    <div class="preview-factors">
+                        <div class="factor-pill warning">
+                            <i class="fa-solid fa-weight-scale"></i> BMI: 31.5 (Elevated)
+                        </div>
+                        <div class="factor-pill warning">
+                            <i class="fa-solid fa-heart-crack"></i> Hypertension: Diagnosed
+                        </div>
+                        <div class="factor-pill success">
+                            <i class="fa-solid fa-person-walking"></i> Active Lifestyle: Yes
+                        </div>
+                    </div>
+
+                    <div class="preview-footer">
+                        <span><i class="fa-solid fa-stopwatch"></i> Instant Inference (&lt;10ms)</span>
+                        <a href="{{ url_for('predict') }}" class="preview-link">Try Now &rarr;</a>
+                    </div>
+                </div>
+
+                <div class="floating-badge bottom-left">
+                    <i class="fa-solid fa-lock"></i>
+                    <div>
+                        <strong>Private &amp; Anonymous</strong>
+                        <span>Zero personal data stored</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="section features-section">
+    <div class="container">
+        <div class="section-header text-center">
+            <span class="section-tag">Platform Capabilities</span>
+            <h2 class="section-title">Built for Clinical Insight &amp; Preventive Empowerment</h2>
+            <p class="section-desc">
+                Designed to bridge the gap between complex statistical epidemiological data and everyday preventive health decisions.
+            </p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon icon-blue">
+                    <i class="fa-solid fa-dna"></i>
+                </div>
+                <h3>21-Dimensional Profiling</h3>
+                <p>
+                    Analyzes cardiovascular history, BMI, subjective health, physical and mental wellness days, smoking, diet, and demographic indicators.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon icon-cyan">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+                <h3>HistGradientBoosting Engine</h3>
+                <p>
+                    Trained on 183,579 patient records with class-balanced weighting to conquer severe real-world medical class imbalances.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon icon-green">
+                    <i class="fa-solid fa-sliders"></i>
+                </div>
+                <h3>Optimized Healthcare Threshold</h3>
+                <p>
+                    Calibrated on inner-validation splits to maximize F2-score (threshold 0.43), boosting detection recall to 85.11% and minimizing missed cases.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon icon-purple">
+                    <i class="fa-solid fa-list-check"></i>
+                </div>
+                <h3>Actionable Risk Breakdown</h3>
+                <p>
+                    Rather than a black-box probability, receive a categorized breakdown of which lifestyle and clinical factors drive your risk profile.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon icon-amber">
+                    <i class="fa-solid fa-chart-pie"></i>
+                </div>
+                <h3>Transparent Model Analytics</h3>
+                <p>
+                    Inspect real-time confusion matrices, ROC curves, PR curves, and permutation feature importance on our live dashboard.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon icon-red">
+                    <i class="fa-solid fa-notes-medical"></i>
+                </div>
+                <h3>Lab Test Recommendations</h3>
+                <p>
+                    Translates statistical outputs into clear guidance on which clinical laboratory screenings (HbA1c, FPG, OGTT) to discuss with your doctor.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="section how-it-works-section bg-light">
+    <div class="container">
+        <div class="section-header text-center">
+            <span class="section-tag">Simple 3-Step Process</span>
+            <h2 class="section-title">How DiabetesCare AI Works</h2>
+            <p class="section-desc">
+                Complete a guided, non-invasive health questionnaire in under 2 minutes.
+            </p>
+        </div>
+
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-number">01</div>
+                <div class="step-icon">
+                    <i class="fa-solid fa-clipboard-user"></i>
+                </div>
+                <h3>Provide Health Indicators</h3>
+                <p>
+                    Enter basic demographic details, BMI, existing diagnoses (blood pressure, cholesterol), and daily lifestyle habits into our intuitive form.
+                </p>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">02</div>
+                <div class="step-icon">
+                    <i class="fa-solid fa-microchip"></i>
+                </div>
+                <h3>Instant Machine Learning Inference</h3>
+                <p>
+                    Our server-side model evaluates your 21 features against learned population patterns from over 250,000 CDC patient profiles in milliseconds.
+                </p>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">03</div>
+                <div class="step-icon">
+                    <i class="fa-solid fa-heart-circle-check"></i>
+                </div>
+                <h3>Review Stratified Risk &amp; Plan</h3>
+                <p>
+                    View your probability score, risk tier, major contributing factors, and clear preventive steps to discuss with your healthcare provider.
+                </p>
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="{{ url_for('predict') }}" class="btn btn-primary btn-lg">
+                <i class="fa-solid fa-arrow-right"></i> Begin Your Assessment
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Why Early Screening Matters Section -->
+<section class="section why-matters-section">
+    <div class="container">
+        <div class="two-col-layout">
+            <div class="col-text">
+                <span class="section-tag">Clinical Importance</span>
+                <h2 class="section-title">Why Early Diabetes Risk Screening Is Vital</h2>
+                <p>
+                    According to the CDC and International Diabetes Federation, over <strong>1 in 3 adults</strong> has pre-diabetes, and more than <strong>80% of them do not know it</strong>. 
+                </p>
+                <p>
+                    Type 2 diabetes develops slowly over years. In early stages, elevated glucose produces no overt symptoms while silent damage to blood vessels, kidneys, and eyes begins.
+                </p>
+                <ul class="check-list">
+                    <li><i class="fa-solid fa-circle-check"></i> <strong>Reversibility:</strong> Pre-diabetes is clinically reversible through diet, exercise, and lifestyle changes.</li>
+                    <li><i class="fa-solid fa-circle-check"></i> <strong>Non-Invasive:</strong> Identifies elevated risk without requiring an immediate blood draw.</li>
+                    <li><i class="fa-solid fa-circle-check"></i> <strong>Triage Tool:</strong> Helps prioritize who urgently needs formal HbA1c laboratory diagnostic tests.</li>
+                </ul>
+                <div class="mt-4">
+                    <a href="{{ url_for('about') }}" class="btn btn-outline">
+                        <i class="fa-solid fa-book-medical"></i> Read Our Clinical Methodology
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-graphic">
+                <div class="info-graphic-box">
+                    <div class="graphic-item">
+                        <div class="graphic-icon red"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                        <div>
+                            <h4>80%+ Undiagnosed</h4>
+                            <p>Most individuals with pre-diabetes have no obvious symptoms until complications arise.</p>
+                        </div>
+                    </div>
+                    <div class="graphic-item">
+                        <div class="graphic-icon green"><i class="fa-solid fa-arrows-spin"></i></div>
+                        <div>
+                            <h4>58% Risk Reduction</h4>
+                            <p>Clinical trials show structured lifestyle modification cuts diabetes onset risk by more than half.</p>
+                        </div>
+                    </div>
+                    <div class="graphic-item">
+                        <div class="graphic-icon blue"><i class="fa-solid fa-heart-pulse"></i></div>
+                        <div>
+                            <h4>Cardiometabolic Shield</h4>
+                            <p>Controlling blood sugar simultaneously protects the heart, kidneys, eyesight, and peripheral nerves.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Banner -->
+<section class="cta-banner">
+    <div class="container text-center">
+        <h2>Take Control of Your Health Journey Today</h2>
+        <p>Complete your free, confidential, AI-powered health assessment in just two minutes.</p>
+        <a href="{{ url_for('predict') }}" class="btn btn-light btn-lg">
+            <i class="fa-solid fa-stethoscope"></i> Start Assessment Now
+        </a>
+    </div>
+</section>
+{% endblock %}

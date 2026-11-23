@@ -1,0 +1,299 @@
+{% extends "base.html" %}
+
+{% block title %}DiabetesCare AI - Interactive Population Analytics &amp; Model Dashboard{% endblock %}
+
+{% block head %}
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<section class="page-header dashboard-header">
+    <div class="container text-center">
+        <span class="section-tag"><i class="fa-solid fa-chart-column"></i> Verified Research Data</span>
+        <h1 class="page-title">Epidemiological &amp; Model Analytics Dashboard</h1>
+        <p class="page-subtitle">
+            Explore verified population health statistics from 253,680 CDC BRFSS patient survey responses and examine the real-world evaluation metrics of our Machine Learning models.
+        </p>
+    </div>
+</section>
+
+<section class="section dashboard-section">
+    <div class="container">
+        
+        <!-- Quick Stats Overview Bar -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-icon blue"><i class="fa-solid fa-users"></i></div>
+                <div class="kpi-body">
+                    <span class="kpi-title">Total Population Analyzed</span>
+                    <span class="kpi-value">253,680</span>
+                    <span class="kpi-sub">229,474 Unique Clean Records</span>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-icon amber"><i class="fa-solid fa-scale-unbalanced"></i></div>
+                <div class="kpi-body">
+                    <span class="kpi-title">Class Imbalance Ratio</span>
+                    <span class="kpi-value">5.54 : 1</span>
+                    <span class="kpi-sub">84.71% Healthy vs 15.29% Diabetic</span>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-icon green"><i class="fa-solid fa-bullseye"></i></div>
+                <div class="kpi-body">
+                    <span class="kpi-title">Champion Model Recall</span>
+                    <span class="kpi-value">85.11%</span>
+                    <span class="kpi-sub">HistGradientBoosting (Thresh 0.43)</span>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-icon purple"><i class="fa-solid fa-chart-area"></i></div>
+                <div class="kpi-body">
+                    <span class="kpi-title">Discrimination (ROC-AUC)</span>
+                    <span class="kpi-value">0.819</span>
+                    <span class="kpi-sub">Precision-Recall AUC: 0.445</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Navigation Tabs -->
+        <div class="dashboard-tabs">
+            <button type="button" class="dash-tab active" data-tab="eda-tab">
+                <i class="fa-solid fa-heart-pulse"></i> 1. Population Health EDA
+            </button>
+            <button type="button" class="dash-tab" data-tab="ml-tab">
+                <i class="fa-solid fa-brain"></i> 2. Model Performance &amp; Evaluation
+            </button>
+            <button type="button" class="dash-tab" data-tab="features-tab">
+                <i class="fa-solid fa-list-ol"></i> 3. Feature Importance &amp; Impact
+            </button>
+            <button type="button" class="dash-tab" data-tab="matrix-tab">
+                <i class="fa-solid fa-table-cells-large"></i> 4. Confusion Matrix &amp; Thresholds
+            </button>
+        </div>
+
+        <!-- TAB 1: Population Health EDA -->
+        <div class="tab-pane active" id="eda-tab">
+            <div class="charts-row">
+                <!-- Target Distribution Chart -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h4><i class="fa-solid fa-pie-chart"></i> Target Class Distribution (Imbalance)</h4>
+                        <span class="badge-outline">229,474 Records</span>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="targetDistChart"></canvas>
+                    </div>
+                    <p class="chart-footnote">
+                        Severe class imbalance: Non-diabetic patients outnumber diabetic patients ~5.5 to 1. Handled via <code>class_weight='balanced'</code>.
+                    </p>
+                </div>
+
+                <!-- Age vs Prevalence Chart -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h4><i class="fa-solid fa-chart-line"></i> Diabetes Prevalence by Age Bracket</h4>
+                        <span class="badge-outline">13 Age Brackets</span>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="agePrevalenceChart"></canvas>
+                    </div>
+                    <p class="chart-footnote">
+                        Diabetes rate rises sharply from 1.37% (ages 18–24) to over 21.85% (ages 70–74), a 16-fold elevation.
+                    </p>
+                </div>
+            </div>
+
+            <div class="charts-row mt-4">
+                <!-- Cardiovascular Risk Factors Comparison -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h4><i class="fa-solid fa-heart-crack"></i> Diabetes Rate by Key Health Factors (%)</h4>
+                        <span class="badge-outline">Comparative Risk</span>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="healthFactorsChart"></canvas>
+                    </div>
+                    <p class="chart-footnote">
+                        Individuals with High Blood Pressure have a 24.5% diabetes prevalence vs 6.0% without it (a 4x difference).
+                    </p>
+                </div>
+
+                <!-- General Health Rating vs Diabetes Rate -->
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h4><i class="fa-solid fa-stethoscope"></i> Self-Rated Health vs Diabetes Prevalence</h4>
+                        <span class="badge-outline">GenHlth 1 to 5</span>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="genHealthChart"></canvas>
+                    </div>
+                    <p class="chart-footnote">
+                        General Health is the single strongest predictor: diabetes prevalence climbs from 2.5% in "Excellent" health to 37.9% in "Poor" health.
+                    </p>
+                </div>
+            </div>
+
+            <!-- BMI Comparison Box -->
+            <div class="stats-highlight-card mt-4">
+                <div class="stats-highlight-header">
+                    <h4><i class="fa-solid fa-weight-scale"></i> Body Mass Index (BMI) Distribution Comparison</h4>
+                </div>
+                <div class="stats-highlight-grid">
+                    <div class="highlight-item">
+                        <span class="highlight-num">28.38</span>
+                        <span class="highlight-label">Overall Population Mean BMI (Overweight)</span>
+                    </div>
+                    <div class="highlight-item">
+                        <span class="highlight-num text-success">27.81</span>
+                        <span class="highlight-label">Non-Diabetic Group Mean BMI</span>
+                    </div>
+                    <div class="highlight-item">
+                        <span class="highlight-num text-danger">31.94</span>
+                        <span class="highlight-label">Diabetic Group Mean BMI (Obese Range)</span>
+                    </div>
+                    <div class="highlight-item">
+                        <span class="highlight-num text-primary">+4.13</span>
+                        <span class="highlight-label">Average BMI Elevation in Diabetic Cohort</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: Model Performance & Comparison -->
+        <div class="tab-pane" id="ml-tab">
+            <div class="chart-card full-width">
+                <div class="chart-header">
+                    <h4><i class="fa-solid fa-trophy"></i> Multi-Algorithm Performance Comparison (45,895 Test Patients)</h4>
+                    <span class="badge-outline">Strict Unseen Evaluation</span>
+                </div>
+                <div class="chart-wrapper tall">
+                    <canvas id="modelComparisonChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Metrics Comparison Table -->
+            <div class="table-responsive-card mt-4">
+                <table class="table-modern">
+                    <thead>
+                        <tr>
+                            <th>Model Architecture</th>
+                            <th>Recall (Sensitivity)</th>
+                            <th>F2-Score (Healthcare)</th>
+                            <th>ROC-AUC</th>
+                            <th>PR-AUC</th>
+                            <th>Precision</th>
+                            <th>Accuracy</th>
+                            <th>Training Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Logistic Regression</strong> (Standardized)</td>
+                            <td>76.01%</td>
+                            <td>0.5949</td>
+                            <td>0.8106</td>
+                            <td>0.4121</td>
+                            <td>31.83%</td>
+                            <td>71.43%</td>
+                            <td>1.19s</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Decision Tree Classifier</strong> (Pruned)</td>
+                            <td>77.19%</td>
+                            <td>0.5917</td>
+                            <td>0.8015</td>
+                            <td>0.4163</td>
+                            <td>30.60%</td>
+                            <td>69.74%</td>
+                            <td>3.60s</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Random Forest Classifier</strong> (100 Trees)</td>
+                            <td>77.82%</td>
+                            <td>0.6064</td>
+                            <td>0.8173</td>
+                            <td>0.4426</td>
+                            <td>32.20%</td>
+                            <td>71.55%</td>
+                            <td>35.04s</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>HistGradientBoosting Classifier</strong> 🏆</td>
+                            <td><strong>79.13%</strong> <span class="badge-pill">(85.11% tuned)</span></td>
+                            <td><strong>0.6087</strong> <span class="badge-pill">(0.6139 tuned)</span></td>
+                            <td><strong>0.8186</strong></td>
+                            <td><strong>0.4454</strong></td>
+                            <td>31.65%</td>
+                            <td>70.68%</td>
+                            <td>15.79s</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 3: Feature Importance -->
+        <div class="tab-pane" id="features-tab">
+            <div class="chart-card full-width">
+                <div class="chart-header">
+                    <h4><i class="fa-solid fa-ranking-star"></i> Top 10 Feature Importances (Permutation ROC-AUC Impact)</h4>
+                    <span class="badge-outline">Gradient Boosting Model</span>
+                </div>
+                <div class="chart-wrapper tall">
+                    <canvas id="featureImportanceChart"></canvas>
+                </div>
+                <p class="chart-footnote">
+                    Permutation importance measures how much model ROC-AUC drops when a feature is randomly shuffled. General Health, BMI, Age, and Blood Pressure form the core predictive quartet.
+                </p>
+            </div>
+        </div>
+
+        <!-- TAB 4: Confusion Matrix & Threshold Tuning -->
+        <div class="tab-pane" id="matrix-tab">
+            <div class="matrix-toggle-row">
+                <span>Select Decision Threshold for Confusion Matrix:</span>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-outline active" id="btnThreshTuned">
+                        Validated Clinical Threshold (0.43) &mdash; Recommended
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline" id="btnThreshDefault">
+                        Standard Default Threshold (0.50)
+                    </button>
+                </div>
+            </div>
+
+            <div class="matrix-display-container mt-4">
+                <div class="confusion-matrix-card">
+                    <div class="matrix-grid-2x2" id="matrixGrid">
+                        <!-- Filled dynamically by JavaScript -->
+                    </div>
+                </div>
+
+                <div class="matrix-explanation-card">
+                    <h4>Clinical Impact of Threshold Optimization</h4>
+                    <p>
+                        In disease screening, a False Negative (missed diabetic patient) is far more hazardous than a False Positive (a healthy person recommended for a simple blood test).
+                    </p>
+                    <ul class="matrix-metrics-list" id="matrixMetricsList">
+                        <!-- Filled dynamically -->
+                    </ul>
+                    <div class="alert alert-info">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <span>By tuning the decision threshold to <strong>0.43</strong> using our inner validation split, we reduced missed diabetic patients from <strong>1,465 down to 1,045</strong> (a <strong>28.7% reduction in missed diagnoses</strong>).</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}
